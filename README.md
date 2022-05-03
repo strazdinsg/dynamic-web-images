@@ -48,13 +48,12 @@ The solutions you choose depends on the whole structure of your project, of cour
 specific configuration. This is the suggested way to handle image upload in the
 courses [IDATA2301 Web technologies](https://www.ntnu.edu/studies/courses/IDATA2301)
 and [IDATA2306 Application development](https://www.ntnu.edu/studies/courses/IDATA2306) taught
-at [NTNU](https://www.ntnu.edu). 
+at [NTNU](https://www.ntnu.edu).
 
-### Image upload
-TBD
+The example will use the following parts, see sub-folders for implementation:
 
-### Image storage
-TBD
-
-### Image download
-TBD
+1. [React frontend application](react-image-upload) for image upload (uses XMLHttpRequest, but could use axios, Fetch or
+   other HTTP request sending tools)
+2. An alternative: image upload in plain Javascript
+3. [Backend application](spring-boot-backend) which stores images in an SQL database and exposes a REST API endpoint for
+   image download
