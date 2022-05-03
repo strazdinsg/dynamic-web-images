@@ -1,0 +1,10 @@
+.add-product-container {
+    width: 5rem;
+    margin: auto;
+    transition-duration: 0.5s;
+}
+
+.add-product-container:hover {
+    width: 5.4rem;
+    color: #003c77;
+}

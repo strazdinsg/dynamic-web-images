@@ -7,12 +7,15 @@ import {SaveButton} from "./SaveButton";
 
 /**
  * A component representing a single product card
- * @param props Properties containing the product object
+ * @param props Properties containing the following:
+ *  - product - the product to edit
+ *  - saveFunction - function to call when saving an existing product
+ *  - addFunction - function to call, when adding a new product
  * @return {JSX.Element}
  * @constructor
  */
 export function ProductCard(props) {
-    const [editMode, setEditMode] = useState(false);
+    const [editMode, setEditMode] = useState(props.product.id === null);
     const [name, setName] = useState(props.product.name);
     const [price, setPrice] = useState(props.product.price);
     const [description, setDescription] = useState(props.product.description);
@@ -41,7 +44,10 @@ export function ProductCard(props) {
             <textarea id="description-input" placeholder="Description" value={description}
                       onChange={(event) => setDescription(event.target.value)}/>
         </div>;
-        editButton = <SaveButton clickFunction={saveProduct}/>;
+        const haveValues = name !== "" && price > 0 && description !== "";
+        if (haveValues) {
+            editButton = <SaveButton clickFunction={saveProduct}/>;
+        }
     } else {
         imageElement = <img src={productImage} alt="product"/>;
         titleElement = <h2 className="product-card-title">{name}</h2>;
@@ -82,17 +88,21 @@ export function ProductCard(props) {
     }
 
     /**
-     *
+     * Add/save the product - call the necessary function of the parent component
      */
     function saveProduct() {
-        const newProduct = {
+        const product = {
             "id": props.product.id,
             "name": name,
             "price": price,
             "description": description,
             "imageId": imageId
         };
-        props.saveFunction(newProduct);
+        if (props.product.id) {
+            props.saveFunction(product);
+        } else {
+            props.addFunction(product);
+        }
         toggleEditing();
     }
 }

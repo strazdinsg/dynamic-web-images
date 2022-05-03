@@ -1,65 +1,44 @@
-// Here we handle business logic for the products
+// Here we handle business logic for products
 
+import {sendApiDeleteRequest, sendApiGetRequest, sendApiPostRequest, sendApiPutRequest} from "./api-requests";
 
-import {sendApiGetRequest} from "./api-requests";
-
-const FAKE_PRODUCTS = [
-    {
-        "id": 1,
-        "name": "Jeans",
-        "description": "Classic blue jeans for every situation of life (perhaps except weddings). No money back guarantee.",
-        "price": 123,
-        "imageId": 17
-    },
-    {
-        "id": 2,
-        "name": "Sneakers",
-        "description": "Regular sneakers. Comfortable, available in all sizes and colors. Wear them to office, as well as to a digital meeting in MS Teams. Not meant for sneaking.",
-        "price": 226.99
-    },
-    {
-        "id": 3,
-        "name": "T-shirt",
-        "description": "A shirt that reminds everyone of 'green thinking'.",
-        "price": 57
-    },
-];
-
-// Pretend that these products are loaded from a backend
-
-// Products loading takes 3 seconds
-const PRODUCT_LOAD_TIMEOUT = 3000;
-
+const PRODUCT_URL = "/products";
 /**
  * Get products from the backend
- * @param callback A callback function called when products arrive from the backend, with products as the only argument
- * @param errorCallback A callback function called when the request failed
+ * @param callback Function to call on success
+ * @param errorCallback Function to call on error
  * @return {Array}
  */
 export function loadProductsFromServer(callback, errorCallback) {
-    sendApiGetRequest("/products", callback, errorCallback);
+    sendApiGetRequest(PRODUCT_URL, callback, errorCallback);
 }
 
-export function deleteProductOnServer(productId, callback) {
-    // TODO
-    console.log("Deleting product on server...");
-    if (callback) {
-        callback();
-    }
+/**
+ * Send request to the server - delete a product
+ * @param productId ID of the product to delete
+ * @param callback Function to call on success
+ * @param errorCallback Function to call on error
+ */
+export function deleteProductOnServer(productId, callback, errorCallback) {
+    sendApiDeleteRequest(PRODUCT_URL + "/" + productId, callback, errorCallback);
 }
 
-export function deleteProductImageOnServer(imageId, callback) {
-    // TODO
-    console.log(`Deleting product image ${imageId} on server...`);
-    if (callback) {
-        callback();
-    }
+/**
+ * Send request to the server - save product
+ * @param product The product to save
+ * @param callback Function to call on success
+ * @param errorCallback Function to call on error
+ */
+export function updateProductOnServer(product, callback, errorCallback) {
+    sendApiPutRequest(PRODUCT_URL + "/" + product.id, callback, product, errorCallback);
 }
 
-export function saveProductOnServer(product, callback) {
-    // TODO
-    console.log("Sending product to server...");
-    if (callback) {
-        callback();
-    }
+/**
+ * Send request to the server - add a new product
+ * @param product The product to add
+ * @param callback Function to call on success
+ * @param errorCallback Function to call on error
+ */
+export function addProductOnServer(product, callback, errorCallback) {
+    sendApiPostRequest(PRODUCT_URL, callback, product, errorCallback);
 }
