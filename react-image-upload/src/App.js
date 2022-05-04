@@ -8,6 +8,8 @@ import {
 } from "./services/product-service";
 import {deleteImageOnServer} from "./services/image-service";
 import {AddProductButton} from "./components/AddProductButton";
+import {useDispatch, useSelector} from "react-redux";
+import {setProducts, removeProduct, setIdOfAddedProduct, addTempProduct, updateProduct} from "./redux/productSlice";
 
 /**
  * A component representing the whole application
@@ -15,12 +17,12 @@ import {AddProductButton} from "./components/AddProductButton";
  * @constructor
  */
 export function App() {
-    const [products, setProducts] = useState([]);
+    const products = useSelector(state => state.productStore.products);
+    const dispatch = useDispatch();
     const [productsLoaded, setProductsLoaded] = useState(false);
     const [loadingInProgress, setLoadingInProgress] = useState(false);
     const [error, setError] = useState(null);
     const [addFormVisible, setAddFormVisible] = useState(false);
-    const [addableProduct, setAddableProduct] = useState(null);
 
     // Call loadProducts() on every re-render of the component (including the first one)
     useEffect(loadProducts);
@@ -49,9 +51,9 @@ export function App() {
         productAddButton = <AddProductButton clickFunction={showProductAddForm}/>;
     }
     let productAddForm;
-    if (addableProduct) {
+    if (addFormVisible) {
         productAddForm = <ProductCard
-            product={addableProduct}
+            product={createEmptyProduct()}
             addFunction={addProduct}
         />;
     }
@@ -82,10 +84,9 @@ export function App() {
         setLoadingInProgress(false);
         if (Array.isArray(products)) {
             console.log("Products received");
-            setProducts(products);
+            dispatch(setProducts(products));
         } else {
             setError("Could not load products");
-            setProducts([]);
         }
     }
 
@@ -108,16 +109,9 @@ export function App() {
             deleteImageOnServer(product.imageId, onImageDeleted);
         }
         deleteProductOnServer(product.id, onProductDeleted);
-        removeProductFromState(product.id);
+        dispatch(removeProduct(product.id));
     }
 
-    /**
-     * Remove the product from the state variable
-     * @param productId
-     */
-    function removeProductFromState(productId) {
-        setProducts(products.filter(product => product.id !== productId));
-    }
 
     /**
      * Send request to the server to add a product
@@ -126,6 +120,7 @@ export function App() {
     function addProduct(product) {
         console.log("Adding product...");
         addProductOnServer(product, onProductAdded, onProductAddFailed);
+        dispatch(addTempProduct(product));
     }
 
     /**
@@ -135,23 +130,22 @@ export function App() {
     function saveProduct(product) {
         console.log(`Saving product...`);
         updateProductOnServer(product, onProductSaved, onProductSaveFailed);
+        dispatch(updateProduct(product));
+    }
+
+    /**
+     * Create an empty product
+     * @return {{imageId: null, price: string, name: string, description: string, id: null}}
+     */
+    function createEmptyProduct() {
+        return {id: null, name: "", description: "", price: "", imageId: null};
     }
 
     /**
      * Show the form for adding a new product
      */
     function showProductAddForm() {
-        console.log("showProductAddForm");
-        const emptyProduct = {id: null, name: "", description: "", price: "", imageId: null};
-        setAddableProduct(emptyProduct);
         setAddFormVisible(true);
-    }
-
-    /**
-     * Force re-load of all the products (from the server)
-     */
-    function forceProductReload() {
-        setProductsLoaded(false);
     }
 
     /**
@@ -180,11 +174,8 @@ export function App() {
      * @param productId Id of the newly added product
      */
     function onProductAdded(productId) {
-        // TODO - find a smarter way to simply show the product here without reloading all the data
-        console.log("Product added, id = " + productId);
         setAddFormVisible(false);
-        setAddableProduct(null);
-        forceProductReload();
+        dispatch(setIdOfAddedProduct(productId));
     }
 
     /**
