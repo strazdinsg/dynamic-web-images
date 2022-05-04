@@ -54,6 +54,18 @@ export function sendApiDeleteRequest(url, callback, errorCallback) {
     sendApiRequest("delete", url, callback, null, errorCallback)
 }
 
+/**
+ * Send an HTTP POST REST-API request with multipart form-data to the backend
+ * @param url relative URL of the API endpoint
+ * @param fileContent Content of the file to upload
+ * @param callback Callback function to call on success, with response data (JSON-decoded) as the parameter
+ * @param errorCallback A function called when the response code is not 200. Two parameters will be passed
+ * to the function: HTTP response code and response body (as text)
+ */
+export function sendApiFileUploadRequest(url, fileContent, callback, errorCallback) {
+    sendApiRequest("post", url, callback, null, errorCallback, fileContent)
+}
+
 
 /**
  * Send a REST-API request to the backend, generic function
@@ -63,8 +75,9 @@ export function sendApiDeleteRequest(url, callback, errorCallback) {
  * @param requestBody When supplied, send this data in the request body. Does not work with HTTP GET!
  * @param errorCallback A function called when the response code is not 200. Two parameters will be passed
  * to the function: HTTP response code and response body (as text)
+ * @param fileContent Content of a file to upload. Note: fileContent is only considered when requestBody is not specified!
  */
-function sendApiRequest(method, url, callback, requestBody, errorCallback) {
+function sendApiRequest(method, url, callback, requestBody, errorCallback, fileContent) {
     const request = new XMLHttpRequest();
     request.onreadystatechange = function () {
         if (request.readyState === XMLHttpRequest.DONE) {
@@ -97,15 +110,22 @@ function sendApiRequest(method, url, callback, requestBody, errorCallback) {
     //     request.setRequestHeader("Authorization", "Bearer " + jwtToken);
     // }
 
+    let dataToSend = null;
     // Do we need to include data in the request?
     if (requestBody) {
         if (method.toLowerCase() !== "get") {
             request.setRequestHeader('Content-Type', 'application/json');
-            request.send(JSON.stringify(requestBody));
+            dataToSend = JSON.stringify(requestBody);
         } else {
             console.error("Trying to send request data with HTTP GET, not allowed!")
-            request.send();
         }
+    } else if (fileContent) {
+        dataToSend = new FormData();
+        dataToSend.append("fileContent", fileContent);
+    }
+
+    if (dataToSend) {
+        request.send(dataToSend);
     } else {
         request.send();
     }

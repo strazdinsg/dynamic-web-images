@@ -4,6 +4,7 @@ import {EditButton} from "./EditButton";
 import productImage from "../img/products/1.jpg"
 import {useState} from "react";
 import {SaveButton} from "./SaveButton";
+import {ImageEditor} from "./ImageEditor";
 
 /**
  * A component representing a single product card
@@ -48,6 +49,7 @@ export function ProductCard(props) {
         if (haveValues) {
             editButton = <SaveButton clickFunction={saveProduct}/>;
         }
+        imageElement = <ImageEditor onImageUpload={onImageUpload}/>;
     } else {
         imageElement = <img src={productImage} alt="product"/>;
         titleElement = <h2 className="product-card-title">{name}</h2>;
@@ -104,5 +106,9 @@ export function ProductCard(props) {
             props.addFunction(product);
         }
         toggleEditing();
+    }
+
+    function onImageUpload(imageId) {
+        console.log("Card.onImageUpload");
     }
 }

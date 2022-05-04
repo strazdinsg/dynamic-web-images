@@ -1,0 +1,27 @@
+/* Styles for ImageEditor */
+
+.image-editor-preview {
+    width: 20rem;
+    margin: auto auto 2rem;
+}
+
+.image-editor-preview-image {
+    display: block;
+    max-width: 100%;
+    max-height: 20rem;
+}
+
+.image-editor-action-label {
+    border: 1px solid black;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    transition-duration: 0.2s;
+    width: 15rem;
+    display: block;
+    margin: auto;
+}
+
+.image-editor-action-label:hover {
+    background-color: #003c77;
+    color: white;
+}
