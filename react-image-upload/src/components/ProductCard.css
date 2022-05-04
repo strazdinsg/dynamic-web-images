@@ -10,7 +10,7 @@
     max-width: 120rem;
     min-height: 20rem;
     box-shadow: 0 0 2rem 0 rgba(100, 100, 100, 0.2);
-    transition-duration: 0.5s;
+    transition-duration: 0.2s;
 }
 
 .product-card-image {
