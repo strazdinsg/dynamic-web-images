@@ -84,5 +84,9 @@
 .product-card-editable textarea {
     height: 20rem;
     margin-bottom: 2rem;
-    padding: 1rem;
+}
+
+.product-card-editable input, .product-card-editable textarea {
+    padding: 0.5rem;
+    border-radius: 0.5rem;
 }
