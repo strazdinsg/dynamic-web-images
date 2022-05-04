@@ -1,0 +1,12 @@
+/* Styles for ActionButton */
+.action-button {
+    width: 6rem;
+    cursor: pointer;
+    margin: auto;
+    transition-duration: 0.2s;
+}
+
+.action-button:hover {
+    color: #003c77;
+    width: 6.5rem;
+}

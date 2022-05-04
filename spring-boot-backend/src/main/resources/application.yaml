@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    url: jdbc:derby:memory:local;create=true
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+server:
+  port: 8043 # Use a unique port, for running on a single deployment server
