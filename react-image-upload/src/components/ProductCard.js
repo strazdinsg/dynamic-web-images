@@ -1,10 +1,11 @@
 import "./ProductCard.css"
 import {DeleteButton} from "./DeleteButton";
 import {EditButton} from "./EditButton";
-import productImage from "../img/products/1.jpg"
 import {useState} from "react";
 import {SaveButton} from "./SaveButton";
 import {ImageEditor} from "./ImageEditor";
+import {DefaultImageIcon} from "./DefaultImageIcon";
+import {generateImageUrl} from "../services/image-service";
 
 /**
  * A component representing a single product card
@@ -49,9 +50,15 @@ export function ProductCard(props) {
         if (haveValues) {
             editButton = <SaveButton clickFunction={saveProduct}/>;
         }
-        imageElement = <ImageEditor onImageUpload={onImageUpload}/>;
+        imageElement = <ImageEditor imageUrl={generateImageUrl(imageId)} onImageUpload={onImageUpload}/>;
     } else {
-        imageElement = <img src={productImage} alt="product"/>;
+        if (imageId) {
+            imageElement = <img src={generateImageUrl(imageId)} alt="product"/>;
+        } else {
+            imageElement = <div className="product-card-default-image">
+                <DefaultImageIcon/>
+            </div>;
+        }
         titleElement = <h2 className="product-card-title">{name}</h2>;
         priceElement = <h3 className="product-card-price">{price} Kr</h3>;
         descriptionElement = <div className="product-card-description">{description}</div>;
@@ -109,6 +116,7 @@ export function ProductCard(props) {
     }
 
     function onImageUpload(imageId) {
-        console.log("Card.onImageUpload");
+        console.log("Card.onImageUpload, ID = " + imageId);
+        setImageId(imageId);
     }
 }

@@ -20,6 +20,11 @@
     margin-top: 2rem;
 }
 
+.product-card-default-image {
+    width: 15rem;
+    margin: auto;
+}
+
 .product-card-image img {
     height: 100%;
     margin: auto;

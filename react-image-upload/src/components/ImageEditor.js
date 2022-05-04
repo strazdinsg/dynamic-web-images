@@ -9,7 +9,7 @@ import {DefaultImageIcon} from "./DefaultImageIcon";
  * @constructor
  */
 export function ImageEditor(props) {
-    const [imageUrl, setImageUrl] = useState(null);
+    const [imageUrl, setImageUrl] = useState(props.imageUrl);
 
     let previewImage;
     if (imageUrl) {
@@ -53,7 +53,6 @@ export function ImageEditor(props) {
         if (props.onImageUpload) {
             props.onImageUpload(imageId);
         }
-        console.log("Image uploaded");
     }
 
     /**

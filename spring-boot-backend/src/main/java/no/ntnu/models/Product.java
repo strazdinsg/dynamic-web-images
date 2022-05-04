@@ -18,6 +18,8 @@ public class Product {
     private String description;
     private double price;
 
+    private int imageId;
+
     public Product() {
     }
 
@@ -57,5 +59,17 @@ public class Product {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public int getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(int imageId) {
+        this.imageId = imageId;
     }
 }

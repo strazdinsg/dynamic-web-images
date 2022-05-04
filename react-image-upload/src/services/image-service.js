@@ -1,6 +1,6 @@
 // Here we handle business logic for images
 
-import {sendApiDeleteRequest, sendApiFileUploadRequest} from "./api-requests";
+import {API_BASE_URL, sendApiDeleteRequest, sendApiFileUploadRequest} from "./api-requests";
 
 const IMAGE_URL = "/images";
 
@@ -22,4 +22,17 @@ export function deleteImageOnServer(imageId, callback, errorCallback) {
  */
 export function uploadImageToServer(image, callback, errorCallback) {
     sendApiFileUploadRequest(IMAGE_URL, image, callback, errorCallback);
+}
+
+/**
+ * Get URL for fetching image with given ID
+ * @param imageId ID of the image to fetch
+ * @return {string} full image URL or null when image ID is invalid
+ */
+export function generateImageUrl(imageId) {
+    if (imageId > 0) {
+        return API_BASE_URL + IMAGE_URL + "/" + imageId;
+    } else {
+        return null;
+    }
 }
